@@ -1,0 +1,296 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    height: 100vh; /* Full viewport height */
+    width: 100vw;  /* Full viewport width */
+    overflow: hidden; /* Prevent scrollbars */
+}
+
+.left-side {
+    width: 42%; /* 42% of the width */
+    height: 100vh; /* Full height */
+    position: relative;
+    -webkit-box-shadow: inset -21px 74px 36px -36px rgba(0, 0, 0, 0.47);
+    -moz-box-shadow: inset -21px 130px 36px -36px rgba(0,0,0,0.47);
+    box-shadow: inset -21px 130px 36px -36px rgba(0,0,0,0.47);
+}
+
+.background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.right-side {
+    width: 58%;
+    height: 100vh; /* Ensure it takes full height */
+    background: url('RK-BG.jpg') no-repeat center center/cover;
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    justify-content: flex-start; /* Align items to the top */
+    padding: 20px;
+}
+
+.content-slot {
+    max-width: 80%;
+    text-align: center;
+}
+
+.logo-title {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: white;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 20%;
+    max-width: 100px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.title {
+    font-size: 24px;
+}
+
+.content-slot {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 70%;
+    height: 130px;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+
+    .logo {
+        width: 15%;
+    }
+
+    .logo-title-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0; /* Stretch across the screen */
+        background: rgb(56, 56, 56); /* Background color */
+        padding: 10px; /* Add some padding */
+        z-index: 3; /* Ensure it stays above other content */
+        height: 90px;
+        display: flex; /* Use flexbox for alignment */
+        align-items: center; /* Center vertically */
+    }
+
+    .left-side {
+        display: none;
+    }
+
+    .right-side {
+        width: 100%; /* Make right side take full width */
+        margin-top: 60px; /* Push down the right side below the logo/title */
+    }
+
+    .logo-title {
+        display: flex;
+        align-items: center; /* Center vertically */
+        justify-content: flex-start; /* Align logo to the left */
+        color: rgb(255, 255, 255); /* Change title font to black on mobile */
+        width: 85%; /* Stretch to full width */
+    }
+
+    .title {
+        flex: 1; /* Allow title to take available space */
+        text-align: center; /* Center text */
+    }
+
+    .content-slot {
+        width: 90%;
+        left: 0;
+        right: 0;
+        bottom: 20px;
+        margin: auto;
+    }
+}
+
+.card-container {
+    display: flex;
+    justify-content: flex-start;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.card {
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    min-width: 200px;
+    height: 100%;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right: 10px;
+    user-select: none;
+}
+
+.card-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.card-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+}
+
+.card-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Date and Time section */
+.date-time-container {
+    display: flex;
+    justify-content: space-between; /* Space between month/day and time */
+    padding: 5px; /* Add some padding */
+    width: 100%; /* Ensure it takes full width */
+}
+
+.date-time {
+    display: flex; /* Align month and day in a row */
+    align-items: center; /* Center vertically */
+}
+
+.month {
+    font-weight: bold;
+    font-size: 0.7500em;
+    text-transform: uppercase;
+    margin-right: 5px; /* Space between month and day */
+}
+
+.day {
+    font-weight: bold;
+    font-size: 0.7500em;
+}
+
+.time {
+    font-size: 0.7500em;
+    color: #3e3e3e;
+    align-self: flex-start; /* Align time to the top */
+}
+
+
+/* Score details section */
+.score-details {
+    display: flex;
+    flex-direction: column; /* Stack team scores */
+    justify-content: center;
+    align-items: center; /* Center-align scores */
+    flex: 1; /* Allow score details to fill available space */
+}
+
+
+
+.team {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.team-name {
+    text-align: left;
+    flex: 1;
+    font-size: 0.75em;
+}
+
+.team-score {
+    text-align: right;
+    flex: 0;
+    min-width: 50px;
+    font-size: 0.75em;
+}
+
+.card.selected {
+    -webkit-box-shadow: inset 0px 0px 15px -5px rgba(0,2,41,1);
+    -moz-box-shadow: inset 0px 0px 15px -5px rgba(0,2,41,1);
+    box-shadow: inset 0px 0px 15px -5px rgba(0,2,41,1);
+    transition: transform 0.2s ease; /* Smooth transition for scaling */
+}
+
+.period {
+    margin: 10px 0;
+}
+
+.goal {
+    margin-left: 20px;
+}
+
+h4 {
+    margin: 0;
+}
+
+.goal-box {
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 5px; /* Padding inside the box */
+    margin: 10px 0; /* Space between boxes */
+    background-color: #f9f9f9; /* Light background color */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.goal-details {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+}
+
+.player-image {
+    width: 30px; /* Adjust width of player image as needed */
+    height: 30px; /* Adjust height of player image as needed */
+    margin-right: 10px; /* Space between image and text */
+}
+
+.goal-info {
+    flex-grow: 1; /* Allow this section to take up remaining space */
+    display: flex;
+    flex-direction: column; /* Stack goal scorer and team vertically */
+}
+
+.goal-player {
+    font-weight: bold; /* Make the goal scorer's name bold */
+}
+
+.goal-team {
+    font-size: 0.85em; /* Smaller font size for team name */
+    color: #555; /* Dark gray color for team name */
+}
+
+.goal-time {
+    margin-left: 10px; /* Space between team name and time */
+}
+
+.goal-assists {
+    margin-top: 5px; /* Add some space above assists */
+}
