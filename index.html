@@ -15,7 +15,7 @@
 
         <div class="logo-title-container">
             <div class="logo-title">
-                <img class="logo" src="logo.png" alt="Logo">
+                <img class="logo" src="Logo.png" alt="Logo">
                     <div class="title">
                     <span class="title">Reality Kings <br>Hockey</br></span>
                 </div>
@@ -31,6 +31,17 @@
     
         <div class="right-side">
             <div id="game-details"></div> <!-- Game details area -->
+            
+            <div id="videoModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button">&times;</span>
+                    <video id="goalVideo" width="100%" controls>
+                        <source id="videoSource" src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+            
             <div id="goals"></div> <!-- Goals area -->            
             <div class="content-slot">
                <!--  <h2>Content Slot Title</h2>  Optional title for the content slot -->

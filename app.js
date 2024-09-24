@@ -15,8 +15,27 @@ async function fetchGoalsData(gameID) {
     const csvText = await response.text();
     const parsedData = Papa.parse(csvText, { header: true, dynamicTyping: true }).data;
 
-    // Filter and group goals related to the selected game ID by period
-    const goalsByPeriod = parsedData.filter(row => row.GameID === gameID).reduce((acc, goal) => {
+    // Filter goals related to the selected game ID
+    const filteredGoals = parsedData.filter(row => row.GameID === gameID);
+
+    function timeToSeconds(time) {
+        const [minutes, seconds] = time.split(':').map(Number);
+        return minutes * 60 + seconds;
+    }
+    
+    // Sort goals by scoring time in seconds
+    filteredGoals.sort((a, b) => {
+        return timeToSeconds(a.PeriodClockTime) - timeToSeconds(b.PeriodClockTime);
+    });
+    
+
+    // Sort goals by scoring time (assumes PeriodClockTime is in a comparable format, like minutes or timestamps)
+    filteredGoals.sort((a, b) => {
+        return a.PeriodClockTime - b.PeriodClockTime; // Adjust this if necessary based on your time format
+    });
+
+    // Group sorted goals by period
+    const goalsByPeriod = filteredGoals.reduce((acc, goal) => {
         const period = goal.PeriodName; // Assuming the Period field exists in your CSV
         if (!acc[period]) {
             acc[period] = [];
@@ -27,6 +46,7 @@ async function fetchGoalsData(gameID) {
 
     return goalsByPeriod;
 }
+
 
 function displayGoals(goalsByPeriod) {
     const goalsContainer = document.getElementById("goals");
@@ -41,27 +61,70 @@ function displayGoals(goalsByPeriod) {
             const goalBox = document.createElement("div");
             goalBox.classList.add("goal-box");
 
-            // Assuming you have a way to get the player image URL
-            const playerImageUrl = 'default-skater.png'; // Update with your actual image URL property
-            const GoalUrl = goal.GoalID; // Update with your actual image URL property
-            
-            goalBox.innerHTML = `
-            <div class="goal-details">
-                <img src="${playerImageUrl}" alt="${goal.GoalPlayerFirstName} ${goal.GoalPlayerLastName}" class="player-image"/>
-                <div class="goal-info">
-                    <span class="goal-player">${goal.GoalPlayerFirstName} ${goal.GoalPlayerLastName}</span>
-                    <span class="goal-team">${goal.TeamName}</span>
-                </div>
-                <span class="goal-time">${goal.PeriodClockTime}</span>
-                <img src="play.png" class="player-image">
-            </div>
-            <div class="goal-assists">
-                <strong>Assists:</strong> ${goal.Assist1_FirstName ? goal.Assist1_FirstName : 'Unassisted'} 
-                ${goal.Assist1_LastName ? goal.Assist1_LastName : ''}, 
-                ${goal.Assist2_FirstName ? goal.Assist2_FirstName : ''} 
-                ${goal.Assist2_LastName ? goal.Assist2_LastName : ''}
-            </div>
-        `;      
+// Assuming you have a way to get the player image URL
+const playerImageUrl = 'default-skater.png'; // Update with your actual image URL property
+const GoalUrl = goal.GoalID; // GoalID for the url
+
+goalBox.innerHTML = `
+    <div class="goal-details">
+        <img src="${playerImageUrl}" alt="${goal.GoalPlayerFirstName} ${goal.GoalPlayerLastName}" class="player-image"/>
+        <div class="goal-info">
+            <span class="goal-player">${goal.GoalPlayerFirstName} ${goal.GoalPlayerLastName}</span>
+            <span class="goal-team">${goal.TeamName}</span>
+        </div>
+        <span class="goal-time">${goal.PeriodClockTime}</span>
+        <img src="play.png" class="player-image play-button" data-goal-id="${GoalUrl}" alt="Play Video">
+    </div>
+    <div class="goal-assists">
+        <strong>Assists:</strong> ${goal.Assist1_FirstName ? goal.Assist1_FirstName : 'Unassisted'} 
+        ${goal.Assist1_LastName ? goal.Assist1_LastName : ''}, 
+        ${goal.Assist2_FirstName ? goal.Assist2_FirstName : ''} 
+        ${goal.Assist2_LastName ? goal.Assist2_LastName : ''}
+    </div>
+`;
+
+// Add event listener for play button
+const playButtons = document.querySelectorAll('.play-button');
+playButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        const goalId = this.getAttribute('data-goal-id');
+        const videoUrl = `video/${goalId}.mp4`; // Update with your actual video URL logic
+        openVideoModal(videoUrl);
+    });
+});
+
+// Function to open video modal
+function openVideoModal(videoUrl) {
+    const modal = document.getElementById('videoModal');
+    const videoSource = document.getElementById('videoSource');
+    const video = document.getElementById('goalVideo');
+    
+    videoSource.src = videoUrl; // Set the video URL
+    video.load(); // Load the new video
+    modal.style.display = 'block'; // Show the modal
+}
+
+// Close modal functionality
+const closeButton = document.querySelector('.close-button');
+closeButton.addEventListener('click', function() {
+    closeVideoModal();
+});
+
+window.onclick = function(event) {
+    const modal = document.getElementById('videoModal');
+    if (event.target === modal) {
+        closeVideoModal();
+    }
+}
+
+function closeVideoModal() {
+    const modal = document.getElementById('videoModal');
+    modal.style.display = 'none'; // Hide the modal
+    const video = document.getElementById('goalVideo');
+    video.pause(); // Pause the video when closing
+    video.currentTime = 0; // Reset video to the start
+}
+
         
             periodDiv.appendChild(goalBox);
         });
