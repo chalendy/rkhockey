@@ -15,27 +15,8 @@ async function fetchGoalsData(gameID) {
     const csvText = await response.text();
     const parsedData = Papa.parse(csvText, { header: true, dynamicTyping: true }).data;
 
-    // Filter goals related to the selected game ID
-    const filteredGoals = parsedData.filter(row => row.GameID === gameID);
-
-    function timeToSeconds(time) {
-        const [minutes, seconds] = time.split(':').map(Number);
-        return minutes * 60 + seconds;
-    }
-    
-    // Sort goals by scoring time in seconds
-    filteredGoals.sort((a, b) => {
-        return timeToSeconds(a.PeriodClockTime) - timeToSeconds(b.PeriodClockTime);
-    });
-    
-
-    // Sort goals by scoring time (assumes PeriodClockTime is in a comparable format, like minutes or timestamps)
-    filteredGoals.sort((a, b) => {
-        return a.PeriodClockTime - b.PeriodClockTime; // Adjust this if necessary based on your time format
-    });
-
-    // Group sorted goals by period
-    const goalsByPeriod = filteredGoals.reduce((acc, goal) => {
+    // Filter and group goals related to the selected game ID by period
+    const goalsByPeriod = parsedData.filter(row => row.GameID === gameID).reduce((acc, goal) => {
         const period = goal.PeriodName; // Assuming the Period field exists in your CSV
         if (!acc[period]) {
             acc[period] = [];
@@ -46,7 +27,6 @@ async function fetchGoalsData(gameID) {
 
     return goalsByPeriod;
 }
-
 
 function displayGoals(goalsByPeriod) {
     const goalsContainer = document.getElementById("goals");
