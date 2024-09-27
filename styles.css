@@ -40,7 +40,7 @@
     justify-content: flex-start; /* Align items to the top */
     padding: 20px;
     overflow: scroll; /* Show scrollbars */
-    padding-bottom: 200px; /* Add space at the bottom */
+    padding-bottom: 250px; /* Add space at the bottom */
 }
 
 .right-side::-webkit-scrollbar {
