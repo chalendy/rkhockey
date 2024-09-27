@@ -121,7 +121,8 @@
 
     .right-side {
         width: 100%; /* Make right side take full width */
-        margin-top: 80px; /* Push down the right side below the logo/title */
+        margin-top: 80px; /* Push down the right side below the logo/title */    
+        padding-bottom: 400px; /* Add space at the bottom */
     }
 
     .logo-title {
